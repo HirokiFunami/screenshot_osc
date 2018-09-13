@@ -1,8 +1,8 @@
 #include "ofApp.h"
+#include <string>
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
     // listen on the given port
     ofLog() << "listening for osc messages on port " << PORT;
     receiver.setup(PORT);
@@ -36,6 +36,7 @@ void ofApp::update(){
     ofBackground(100, 100, 100);
     vidGrabber.update();
     
+    
     // check for waiting messages
     while(receiver.hasWaitingMessages()){
         
@@ -45,19 +46,22 @@ void ofApp::update(){
         
         if(m.getAddress() == "/screenshot/right"){
             shutterRight = true;
-            printf("screenshot right!");
+            printf("screenshot right!\n");
         }
 
         if(m.getAddress() == "/screenshot/left"){
             shutterLeft = true;
-            printf("screenshot left!");
+            printf("screenshot left!\n");
         }
         
         if(m.getAddress() == "/screenshot"){
+            //    ファイル名用番号
+            imageNum = imageNum + 1;
             shutterAll = true;
-            printf("screenshot all!");
+            printf("screenshot all!\n");
         }
     }
+
 }
 
 //--------------------------------------------------------------
@@ -72,22 +76,22 @@ void ofApp::draw(){
 //    スクリーンショット撮影 webCam描画より後ろにおく！
     if(shutterRight == true){
         screenShot.grabScreen(0, 0 , camWidth/2, camHeight);
-        printf("screenshot right!");
+        printf("screenshot right!\n");
         screenShot.save("screenshot_right.png");
         shutterRight = false;
     }
     
     if(shutterLeft == true){
         screenShot.grabScreen(camWidth/2, 0, camWidth/2, camHeight);
-        printf("screenshot left!");
+        printf("screenshot left!\n");
         screenShot.save("screenshot_left.png");
         shutterLeft = false;
     }
     
     if(shutterAll == true){
         screenShot.grabScreen(0, 0, camWidth, camHeight);
-        printf("screenshot all!");
-        screenShot.save("screenshot_all.png");
+        printf("screenshot all!\n");
+        screenShot.save(std::to_string(imageNum) + ".png");
         shutterAll = false;
     }
 }
@@ -95,18 +99,27 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
-//    スクショ用
+    
+    
+//    スクショ テスト用
     if(key == 'r' || key == 'R'){
         screenShot.grabScreen(0, 0 , camWidth/2, camHeight);
-        printf("screenshot right!");
+        printf("screenshot right!\n");
         screenShot.save("screenshot_right.png");
     }
     
     if(key == 'l' || key == 'L'){
         screenShot.grabScreen(camWidth/2, 0, camWidth/2, camHeight);
-        printf("screenshot left!");
+        printf("screenshot left!\n");
         screenShot.save("screenshot_left.png");
+    }
+    
+    if(key == 'a' || key == 'A'){
+        //    ファイル名用番号
+        imageNum = imageNum + 1;
+        screenShot.grabScreen(0, 0, camWidth, camHeight);
+        printf("screenshot all!\n");
+        screenShot.save(std::to_string(imageNum) + ".png");
     }
 }
 

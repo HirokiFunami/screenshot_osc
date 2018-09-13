@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
+#include <string>
 
 // listening port
 #define PORT 8888
@@ -42,6 +43,6 @@ class ofApp : public ofBaseApp{
         bool shutterRight = false;
         bool shutterAll = false;
     
-        int imageNum = 0;
+        int imageNum = 10000000;
 		
 };
